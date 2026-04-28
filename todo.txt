@@ -4,6 +4,9 @@ Site-links:
 Media/youtube:
 CONFIGURE
 
+Media/applemusic:
+SW Concert faves broken?
+
 Make a new repo called panel
 - Attempt to configure bot controls through the panel
 
