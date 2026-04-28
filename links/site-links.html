@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Links — redst0ne8</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-brand">redst0ne8 · Site Links</span>
+            <a class="nav-back" href="/backend">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                Backend
+            </a>
+        </div>
+    </nav>
+
+    <main class="backend-page">
+
+        <div class="backend-header">
+            <h1 class="backend-title">Site Links</h1>
+            <p class="backend-subtitle">All site links — domain, subdomain, subsite</p>
+        </div>
+
+        <p class="section-label">Domains</p>
+        <div class="dir-list">
+
+            <!-- Add domain/subdomain/subsite cards below -->
+            <!-- Example:
+            <a class="dir-card" href="https://portfolio.redst0ne8.com" target="_blank" rel="noopener">
+                <div class="dir-card-left">
+                    <div class="dir-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
+                    <div class="dir-info">
+                        <span class="dir-name">portfolio.redst0ne8.com</span>
+                        <span class="dir-desc">Main portfolio site</span>
+                    </div>
+                </div>
+                <span class="dir-arrow">›</span>
+            </a>
+            -->
+
+            <p style="color: rgba(255,255,255,0.35); font-size: 0.9rem; font-weight: 300; text-align: center; margin-top: 2rem;">
+                No links added yet.
+            </p>
+
+        </div>
+
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot"></span>
+                <span class="status-label">System online</span>
+            </div>
+            <div class="status-item">
+                <span>redst0ne8 · portfolio.redst0ne8.com</span>
+            </div>
+            <div class="status-item" id="ts"></div>
+        </div>
+
+    </main>
+
+    <script>
+        function updateTs() {
+            const el = document.getElementById('ts');
+            const now = new Date();
+            el.textContent = now.toLocaleString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+        }
+        updateTs();
+        setInterval(updateTs, 1000);
+    </script>
+
+</body>
+</html>

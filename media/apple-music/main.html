@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music — redst0ne8</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-brand">redst0ne8 · Music</span>
+            <a class="nav-back" href="/backend">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                Backend
+            </a>
+        </div>
+    </nav>
+
+    <main class="backend-page">
+
+        <div class="backend-header">
+            <h1 class="backend-title">Music</h1>
+            <p class="backend-subtitle">Apple Music — All Playlists I own</p>
+        </div>
+
+        <!-- Embeds will go here -->
+        <p class="section-label">Playlists</p>
+
+        <p style="color: rgba(255,255,255,0.35); font-size: 0.9rem; font-weight: 300; text-align: center; margin-top: 2rem;">
+            Embeds coming soon.
+        </p>
+
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot"></span>
+                <span class="status-label">System online</span>
+            </div>
+            <div class="status-item">
+                <span>redst0ne8 · portfolio.redst0ne8.com</span>
+            </div>
+            <div class="status-item" id="ts"></div>
+        </div>
+
+    </main>
+
+    <script>
+        function updateTs() {
+            const el = document.getElementById('ts');
+            const now = new Date();
+            el.textContent = now.toLocaleString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+        }
+        updateTs();
+        setInterval(updateTs, 1000);
+    </script>
+
+</body>
+</html>
