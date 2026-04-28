@@ -1,0 +1,8 @@
+Site-links:
+- Add subdomains
+
+Media/youtube:
+CONFIGURE
+
+Make a new repo called panel
+- Attempt to configure bot controls through the panel
