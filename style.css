@@ -245,6 +245,40 @@ body {
     color: rgba(255, 255, 255, 0.5);
 }
 
+/* ── Back to Backend button ── */
+/* Usage: <a class="btn-backend" href="/backend">← Backend</a> */
+.btn-backend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    background: rgba(255, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-backend:hover {
+    color: #ff0000;
+    border-color: rgba(255, 0, 0, 0.45);
+    background: rgba(255, 0, 0, 0.1);
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.08);
+}
+
+.btn-backend svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.btn-backend:hover svg {
+    transform: translateX(-3px);
+}
+
 /* ── Embed / iframe container ── */
 .embed-container {
     width: 100%;
