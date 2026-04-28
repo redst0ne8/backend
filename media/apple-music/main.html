@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-
     <nav class="navbar">
         <div class="nav-container">
             <span class="nav-brand">redst0ne8 · Music</span>
@@ -18,22 +17,32 @@
             </a>
         </div>
     </nav>
-
     <main class="backend-page">
-
         <div class="backend-header">
             <h1 class="backend-title">Music</h1>
             <p class="backend-subtitle">Apple Music — All Playlists I own</p>
         </div>
-
-        <!-- Embeds will go here -->
+<!-- Embeds will go here -->
         <p class="section-label">Playlists</p>
-
-        <p style="color: rgba(255,255,255,0.35); font-size: 0.9rem; font-weight: 300; text-align: center; margin-top: 2rem;">
-            Embeds coming soon.
-        </p>
-
-        <!-- Status bar -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2rem;margin-top:2rem;">
+            <div style="width:100%;max-width:660px;">
+                <p style="color:rgba(255,255,255,0.55);font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 0.5rem 0;">My Music</p>
+                <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/us/playlist/my-music/pl.u-Ldbqe0ms2mK967B"></iframe>
+            </div>
+            <div style="width:100%;max-width:660px;">
+                <p style="color:rgba(255,255,255,0.55);font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 0.5rem 0;">My Phonk</p>
+                <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/us/playlist/my-phonk/pl.u-leyl0JRcMZA5PaK"></iframe>
+            </div>
+            <div style="width:100%;max-width:660px;">
+                <p style="color:rgba(255,255,255,0.55);font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 0.5rem 0;">SW Concert Favorites</p>
+                <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/us/playlist/sw-concert-favorites/pl.u-BNA6YVRTeXyGRkd"></iframe>
+            </div>
+            <div style="width:100%;max-width:660px;">
+                <p style="color:rgba(255,255,255,0.55);font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 0.5rem 0;">All Of: I Prevail</p>
+                <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/us/playlist/all-of-i-prevail/pl.u-RRbVvlJumgW0eql"></iframe>
+            </div>
+        </div>
+<!-- Status bar -->
         <div class="status-bar">
             <div class="status-item">
                 <span class="status-dot"></span>
@@ -44,21 +53,18 @@
             </div>
             <div class="status-item" id="ts"></div>
         </div>
-
     </main>
-
     <script>
-        function updateTs() {
-            const el = document.getElementById('ts');
-            const now = new Date();
-            el.textContent = now.toLocaleString('en-US', {
-                month: 'short', day: 'numeric', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
+function updateTs() {
+const el = document.getElementById('ts');
+const now = new Date();
+el.textContent = now.toLocaleString('en-US', {
+month: 'short', day: 'numeric', year: 'numeric',
+hour: '2-digit', minute: '2-digit', second: '2-digit'
             });
         }
-        updateTs();
-        setInterval(updateTs, 1000);
-    </script>
-
+updateTs();
+setInterval(updateTs, 1000);
+</script>
 </body>
 </html>

@@ -6,3 +6,6 @@ CONFIGURE
 
 Make a new repo called panel
 - Attempt to configure bot controls through the panel
+
+ALL BACKEND:
+Check the back to backend links for proper routes
