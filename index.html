@@ -1,166 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backend — redst0ne8</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parking — Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0b;
+      --surface: #111114;
+      --border: #1e1e24;
+      --accent: #ff0000;
+      --accent2: #ff4747;
+      --text: #e2e2e8;
+      --muted: #555562;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Glow blob */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(232,255,71,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .page {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      gap: 0;
+    }
+
+    /* Top badge */
+    .badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 2px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+
+    /* P icon */
+    .p-mark {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(100px, 20vw, 180px);
+      line-height: 1;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+      position: relative;
+      display: inline-block;
+    }
+
+    .p-mark::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: lineExpand 0.5s 0.85s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+
+    /* Headline */
+    h1 {
+      font-size: clamp(14px, 2.5vw, 20px);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-top: 16px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.45s forwards;
+    }
+
+    /* Divider */
+    .divider {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      margin: 32px 0;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.55s forwards;
+    }
+
+    /* Status row */
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.6s 0.65s forwards;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse 2s 1s ease-in-out infinite;
+    }
+
+    /* P mark clickable */
+    .p-mark { cursor: pointer; }
+    .p-mark:hover { opacity: 0.85; }
+
+    /* PIN Modal overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,11,0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px 36px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+    }
+
+    .modal-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .pin-dots {
+      display: flex;
+      gap: 12px;
+    }
+
+    .pin-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid var(--muted);
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .pin-dot.filled {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .pin-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .pin-key {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 14px 0;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      user-select: none;
+    }
+
+    .pin-key:hover { border-color: var(--accent); color: var(--accent); }
+    .pin-key.wide { grid-column: span 2; }
+
+    .pin-error {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      height: 14px;
+      transition: opacity 0.2s;
+      opacity: 0;
+    }
+
+    .pin-error.show { opacity: 1; }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--text); }
+
+    /* Corner accents */
+    .corner {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      opacity: 0;
+      animation: fadeIn 0.4s 1s forwards;
+    }
+    .corner.tl { top: 24px; left: 24px; border-top: 1px solid var(--muted); border-left: 1px solid var(--muted); }
+    .corner.tr { top: 24px; right: 24px; border-top: 1px solid var(--muted); border-right: 1px solid var(--muted); }
+    .corner.bl { bottom: 24px; left: 24px; border-bottom: 1px solid var(--muted); border-left: 1px solid var(--muted); }
+    .corner.br { bottom: 24px; right: 24px; border-bottom: 1px solid var(--muted); border-right: 1px solid var(--muted); }
+
+    /* Keyframes */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes lineExpand {
+      to { transform: scaleX(1); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+  </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <span class="nav-brand">redst0ne8 · Backend</span>
-            <a class="nav-back" href="/backend/index.html">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-                Main
-            </a>
-        </div>
-    </nav>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
 
-    <main class="backend-page">
+  <main class="page">
+    <span class="badge">Domain Parked</span>
+    <span class="p-mark" onclick="openModal()">P</span>
+    <h1>Something's Coming</h1>
+    <div class="divider"></div>
+    <div class="status">
+      <span class="dot"></span>
+      <span>Placeholder active</span>
+    </div>
+  </main>
 
-        <div class="backend-header">
-            <h1 class="backend-title">Backend</h1>
-            <p class="backend-subtitle">Internal directory</p>
-        </div>
-
-        <!-- Media -->
-        <p class="section-label">Media</p>
-        <div class="dir-list">
-
-            <a class="dir-card" href="media/youtube/main">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">YouTube</span>
-                        <span class="dir-desc">Playlists of Videos</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-            <a class="dir-card" href="media/apple-music/main">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">Music</span>
-                        <span class="dir-desc">Apple Music | All Playlists I own</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-        </div>
-
-        <!-- Gaming -->
-        <p class="section-label">Gaming</p>
-        <div class="dir-list">
-
-            <a class="dir-card" href="gaming/poker/poker-links">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">Poker</span>
-                        <span class="dir-desc">Poker specific Items</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-            <a class="dir-card" href="gaming/blackjack/main">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">Blackjack</span>
-                        <span class="dir-desc">Blackjack specific item</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-            <a class="dir-card" href="gaming/loveloader/index">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">LoveLoader [Balatro]</span>
-                        <span class="dir-desc">Balatros LoveLoader to play.</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-        </div>
-
-        <!-- Links -->
-        <p class="section-label">Links</p>
-        <div class="dir-list">
-
-            <a class="dir-card" href="links/gh-repos.html">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">GitHub Links</span>
-                        <span class="dir-desc">GitHub Repo Links</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-            <a class="dir-card" href="links/site-links">
-                <div class="dir-card-left">
-                    <div class="dir-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                    </div>
-                    <div class="dir-info">
-                        <span class="dir-name">Site Links</span>
-                        <span class="dir-desc">All site links including domain, subdomain, subsite.</span>
-                    </div>
-                </div>
-                <span class="dir-arrow">›</span>
-            </a>
-
-        </div>
-
-        <!-- Status bar -->
-        <div class="status-bar">
-            <div class="status-item">
-                <span class="status-dot"></span>
-                <span class="status-label">System online</span>
-            </div>
-            <div class="status-item">
-                <span>redst0ne8 · portfolio.redst0ne8.com</span>
-            </div>
-            <div class="status-item" id="ts"></div>
-        </div>
-
-    </main>
-
-    <script>
-        function updateTs() {
-            const el = document.getElementById('ts');
-            const now = new Date();
-            el.textContent = now.toLocaleString('en-US', {
-                month: 'short', day: 'numeric', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-        }
-        updateTs();
-        setInterval(updateTs, 1000);
-    </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
